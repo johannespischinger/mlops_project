@@ -1,9 +1,10 @@
 import argparse
 import sys
-
+import os
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
+from typing import Callable, Optional, Tuple, Union, List
 
 
 class CNNModel(nn.Module):
@@ -39,13 +40,16 @@ class CNNModel(nn.Module):
         return x
 
 
-def train(self, model: nn.Model, epoch: float = 5, batchsize: int = 64, dataset: torch.nn.Dataset, learning_rate: float = 0.001,\
-          loss: torch.nn.Loss,\
-          optimizer: torch.optim):
+def train(model: nn.Module,
+          dataset,
+          criterion: Union[Callable, nn.Module],
+          optimizer: Optional[torch.optim.Optimizer],
+          epoch: float = 5,
+          batchsize: int = 64,
+          learning_rate: float = 0.001
+          ):
 
     trainloader = torch.utils.data.DataLoader(dataset, batchsize, shuffle=True)
-
-    criterion = loss
     loss_hist = []
     for e in range(epoch):
         running_loss = 0
@@ -76,26 +80,27 @@ def train(self, model: nn.Model, epoch: float = 5, batchsize: int = 64, dataset:
 
     checkpoint = {
         "input_size": (64, 1, 28, 28),
-        "output_size": 10,
+       "output_size": 10,
         "optimizer_state_dicts": optimizer.state_dict(),
         "state_dict": model.state_dict(),
     }
 
-    modelstring = str(f"b_{batchsize}_e_{epoch}_lr_{lr}")
+    modelstring = str(f"b_{batchsize}_e_{epoch}_lr_{learning_rate}")
+    os.makedirs("models/", exist_ok=True)
     torch.save(
         checkpoint,
-        f"/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/cookiecutter-ds-project/\
-        models/trained_model_{modelstring}.pt",
-    )
+        "models/trained_model.pt")
 
-    plt.plot(loss_hist)
-    plt.savefig(
-        f"/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/cookiecutter-ds-project/\
-        reports/figures/training_curve_{modelstring}.png"
-    )
+
+    #plt.plot(loss_hist)
+    #plt.savefig(
+    #    f"../../reports/figures/training_curve_{modelstring}.png"
+    #)
 
 if __name__ == "__main__":
     model = CNNModel()
-    dataset_path = 'data/processed/train'
-    train(model,epoch = 5, batchsize= 64, dataset_path, learning_rate= 0.001, loss = torch.nn.NLLLoss(), optimizer= torch.optim.Adam(model.parameters(),learning_rate = 0.001))
+    dataset = torch.load('../../data/processed/test')
+
+    train(model, dataset, torch.nn.NLLLoss(), torch.optim.Adam(model.parameters(), lr = 0.001),
+          epoch = 5, batchsize = 64, learning_rate = 0.001)
 

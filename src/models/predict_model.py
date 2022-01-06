@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 import torch
-from src.models.train_model import CNNModel
+from train_model import CNNModel
 
 
 def loader():
@@ -20,27 +20,28 @@ def loader():
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
 
-    # Loading the files
-    images = []
-    labels = []
     path = args.load_data_from
-    if os.path.isfile(path) == True:
-        prediction = np.load(path)
-        images.append((prediction["images"]))
-        labels.append((prediction["labels"]))
+    dataset = torch.load(path)
 
-    # else:
-    #    for file in glob(glob(os.path.join(path,"*"))):
-    #        .append(np.load(file))
+    return model, dataset
 
-    dataset = torch.from_numpy(np.asarray(images)).view(5000, 1, 28, 28)
+def prediction(model,data):
+
+    testloader = torch.utils.data.DataLoader(data)
+    test_acc = []
 
     with torch.no_grad():
-        prediction = torch.exp(model(dataset.float()))
-        top_p, top_class = prediction.topk(1, dim=1)
+        test_acc = []
+        for images, labels in testloader:
+            prediction = torch.exp(model(images.float().unsqueeze(1)))
+            top_p, top_class = prediction.topk(1, dim=1)
+            equals = top_class == labels.view(*top_class.shape)
+            test_acc.append(torch.mean(equals.type(torch.FloatTensor)))
 
-    return model, prediction, top_p, top_class
+        else:
+            print(f"Accuracy: {sum(test_acc) / len(test_acc)}")
 
 
 if __name__ == "__main__":
-    model, prediction, _, _ = loader()
+    model, dataset = loader()
+    prediction(model, dataset)
