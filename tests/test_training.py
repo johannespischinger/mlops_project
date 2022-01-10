@@ -4,7 +4,7 @@ import torch
 import os
 from tests import _PROJECT_ROOT
 
-
+@pytest.mark.skipif(not os.path.exists(f'{_PROJECT_ROOT}/data'), reason='Data files not found')
 def test_train(caplog):
     caplog.set_level(logging.INFO)
     model = CNNModel()
