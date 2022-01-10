@@ -3,6 +3,7 @@ import logging
 import torch
 import os
 from tests import _PROJECT_ROOT
+import pytest
 
 @pytest.mark.skipif(not os.path.exists(f'{_PROJECT_ROOT}/data'), reason='Data files not found')
 def test_train(caplog):
