@@ -3,14 +3,13 @@ from pathlib import Path
 import os
 import numpy as np
 import pytest
+from tests import _PATH_DATA
 
-path = Path(__file__).resolve().parents[1]
-data_root = 'data/processed'
 
 @pytest.mark.skipif(not os.path.exists(os.path.join(path,data_root)), reason='Data files not found')
 def test_load():
-    test = torch.load(os.path.join(path, 'data/processed/test.pt'))
-    train = torch.load(os.path.join(path, 'data/processed/train.pt'))
+    test = torch.load(f'{_PATH_DATA}/data/processed/test.pt')
+    train = torch.load(f'{_PATH_DATA}/data/processed/train.pt')
     #test, train = load()
     assert len(train) == 25000, 'Dataset did not have the correct number of samples'
     assert len(test) == 5000, 'Dataset did not have the correct number of samples'
