@@ -2,13 +2,13 @@ from src.models.train_model import CNNModel,train
 import logging
 import torch
 import os
-from tests import _PATH_DATA
+from tests import _PROJECT_ROOT
 
 
 def test_train(caplog):
     caplog.set_level(logging.INFO)
     model = CNNModel()
-    dataset = torch.load(f'{_PATH_DATA}/processed/test.pt')
+    dataset = torch.load(f'{_PROJECT_ROOT}/data/processed/test.pt')
     train(model, dataset, torch.nn.NLLLoss(), torch.optim.Adam(model.parameters(), lr=0.001),
           epoch=1, batchsize=64, learning_rate=0.001, test=True)
     assert 'Training finished' in caplog.text, 'Model did not run until the end'
