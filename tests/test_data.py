@@ -5,8 +5,7 @@ import numpy as np
 import pytest
 from tests import _PATH_DATA
 
-
-@pytest.mark.skipif(not os.path.exists(os.path.join(path,data_root)), reason='Data files not found')
+@pytest.mark.skipif(not os.path.exists(f'{_PATH_DATA}/data/processed), reason='Data files not found')
 def test_load():
     test = torch.load(f'{_PATH_DATA}/data/processed/test.pt')
     train = torch.load(f'{_PATH_DATA}/data/processed/train.pt')
