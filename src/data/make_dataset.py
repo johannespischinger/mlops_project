@@ -22,7 +22,7 @@ def main(input_filepath, output_filepath):
     train_images = []
     train_labels = []
 
-    for file in glob.glob(os.path.join(input_filepath,"*")):
+    for file in glob.glob(os.path.join(input_filepath,"train_*.npz")):
         train_data = np.load(file)
         train_images.append(train_data["images"])
         train_labels.append(train_data["labels"])
@@ -32,7 +32,7 @@ def main(input_filepath, output_filepath):
     shape_train = train_images.shape
 
     # Formating tensor from (5,5000,28,28) to (5*5000,28,28)
-    train_images = train_images.view(shape_train[0] * shape_train[1], shape_train[2], shape_train[2])
+    train_images = train_images.view(shape_train[0] * shape_train[1], shape_train[2], shape_train[2]).unsqueeze(1)
 
     # Flattening from shape (5*5000,1) to (5*5000,)
     train_labels = train_labels.view(shape_train[0] * shape_train[1], -1).flatten()
@@ -44,12 +44,12 @@ def main(input_filepath, output_filepath):
     test_images = torch.from_numpy(np.asarray(test_images))
     test_labels = torch.from_numpy(np.asarray(test_labels))
     shape_test = test_images.shape
-    test_images = test_images.view(shape_test[0], shape_test[1], shape_test[1])
+    test_images = test_images.view(shape_test[0], shape_test[1], shape_test[1]).unsqueeze(1)
     test_labels = test_labels.view(shape_test[0], -1).flatten()
     test = torch.utils.data.TensorDataset(test_images, test_labels)
 
-    torch.save(train, os.path.join(output_filepath, "train"))
-    torch.save(test, os.path.join(output_filepath, "test"))
+    torch.save(train, os.path.join(output_filepath, "train.pt"))
+    torch.save(test, os.path.join(output_filepath, "test.pt"))
 
 
 if __name__ == "__main__":

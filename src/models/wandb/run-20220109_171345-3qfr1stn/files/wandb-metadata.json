@@ -1,0 +1,24 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-01-09T16:13:50.866747",
+    "startedAt": "2022-01-09T16:13:45.105694",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [
+        "train"
+    ],
+    "state": "running",
+    "program": "/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/cookiecutter-ds-project/src/models/train_model.py",
+    "codePath": "src/models/train_model.py",
+    "git": {
+        "remote": "git@github.com:johannespischinger/mlops_project.git",
+        "commit": "de127b354e07467027e4fc85c75a65d651b2756c"
+    },
+    "email": "johannes.pischinger@tum.de",
+    "root": "/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/cookiecutter-ds-project",
+    "host": "Johannes-MBP-3.localdomain",
+    "username": "johannespischinger",
+    "executable": "/Users/johannespischinger/opt/anaconda3/envs/mnist/bin/python"
+}

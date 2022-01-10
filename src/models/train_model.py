@@ -1,14 +1,15 @@
-import argparse
-import sys
 import os
-import matplotlib.pyplot as plt
 import torch
 from torch import nn
 from typing import Callable, Optional, Tuple, Union, List
+import wandb
+from pathlib import Path
+import logging
 
+Logger = logging.getLogger(__name__)
 
 class CNNModel(nn.Module):
-    def __init__(self):
+    def __init__(self, input_shape=[1,1,28,28]):
         super().__init__()
 
         self.convolution = nn.Sequential(
@@ -23,9 +24,9 @@ class CNNModel(nn.Module):
             nn.Flatten()
             # Size of image 7*7
         )
-        # n_channels = self.convolution(torch.empty(1, 8, 7, 7)).size(-1)
+        n_channels = self.convolution(torch.empty(input_shape)).size(-1)
         self.linear = nn.Sequential(
-            nn.Linear(392, 64),
+            nn.Linear(n_channels, 64),
             nn.ReLU(),
             nn.Dropout(0.25),
             nn.Linear(64, 10),
@@ -33,32 +34,49 @@ class CNNModel(nn.Module):
         )
 
     def forward(self, x):
+        if x.ndim != 4:
+            raise ValueError('Expect 4D tensor')
+        if x.shape[1] != 1 :
+            raise ValueError('Expected channel size not equal to 1')
 
         x = self.convolution(x)
         x = self.linear(x)
 
         return x
 
+    def forward_cnn(self,x):
+        if x.ndim != 4:
+            raise ValueError('Expect 4D tensor')
+        if x.shape[1] != 1 :
+            raise ValueError('Expected channel size not equal to 1')
+
+        x = self.convolution(x)
+
+        return x.flatten()
+
 
 def train(model: nn.Module,
           dataset,
           criterion: Union[Callable, nn.Module],
           optimizer: Optional[torch.optim.Optimizer],
-          epoch: float = 5,
+          epoch: float = 10,
           batchsize: int = 64,
           learning_rate: float = 0.001
           ):
+    Logger.info('Starting training...')
+    wandb.init()
 
+    wandb.watch(model,log_freq=100)
     trainloader = torch.utils.data.DataLoader(dataset, batchsize, shuffle=True)
     loss_hist = []
+    my_table = wandb.Table(columns=['Image', 'Truth', 'Prediction'])
+
     for e in range(epoch):
         running_loss = 0
         acc = []
-        for images, labels in trainloader:
+        for batch_idx, (images, labels) in enumerate(trainloader):
             optimizer.zero_grad()
-
             images = images.unsqueeze(1)
-
             output = model(images.float())
             ps = torch.exp(output)
             top_p, top_class = ps.topk(1, dim=1)
@@ -71,12 +89,25 @@ def train(model: nn.Module,
             optimizer.step()
 
             running_loss += loss.item()
+            if batch_idx % 100 == 0:
+                [my_table.add_data(wandb.Image(image), label.item(), pred.item()) for image, label, pred in
+                 zip(images, labels, top_class)]
+                wandb.log({"loss": loss})
+
 
         else:
             print(f"Training loss: {running_loss / len(trainloader)}")
             print(f"Accuracy: {sum(acc) / len(acc)}")
 
         loss_hist.append(running_loss)
+
+    wandb.log({'MNIST_prediction': my_table})
+
+    Logger.info('Training finished')
+    #my_table.add_column('Label', labels.view(*top_class.shape)[:5])
+    #my_table.add_column('Prediction', top_class[:5])
+    # wandb.log({'examples': [wandb.Image(im) for im in images[:5]]})
+
 
     checkpoint = {
         "input_size": (64, 1, 28, 28),
@@ -87,6 +118,7 @@ def train(model: nn.Module,
 
     modelstring = str(f"b_{batchsize}_e_{epoch}_lr_{learning_rate}")
     os.makedirs("models/", exist_ok=True)
+
     torch.save(
         checkpoint,
         "models/trained_model.pt")
@@ -98,8 +130,12 @@ def train(model: nn.Module,
     #)
 
 if __name__ == "__main__":
+
+    path = Path(__file__).resolve().parents[2]
+    print(path.parent.absolute())
+
     model = CNNModel()
-    dataset = torch.load('../../data/processed/test')
+    dataset = torch.load(os.path.join(path,'data/processed/test.pt'))
 
     train(model, dataset, torch.nn.NLLLoss(), torch.optim.Adam(model.parameters(), lr = 0.001),
           epoch = 5, batchsize = 64, learning_rate = 0.001)

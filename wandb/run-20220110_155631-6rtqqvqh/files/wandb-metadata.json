@@ -1,0 +1,23 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-01-10T14:56:33.681507",
+    "startedAt": "2022-01-10T14:56:31.773141",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [
+        "tests/"
+    ],
+    "state": "running",
+    "program": "/Users/johannespischinger/opt/anaconda3/envs/mnist/lib/python3.8/site-packages/pytest/__main__.py",
+    "git": {
+        "remote": "git@github.com:johannespischinger/mlops_project.git",
+        "commit": "de127b354e07467027e4fc85c75a65d651b2756c"
+    },
+    "email": "johannes.pischinger@tum.de",
+    "root": "/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/cookiecutter-ds-project",
+    "host": "johannes-mbp-3.students.clients.local",
+    "username": "johannespischinger",
+    "executable": "/Users/johannespischinger/opt/anaconda3/envs/mnist/bin/python"
+}
