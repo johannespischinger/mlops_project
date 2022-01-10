@@ -1,0 +1,22 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.9.7",
+    "heartbeatAt": "2022-01-10T16:39:25.455934",
+    "startedAt": "2022-01-10T16:39:23.576270",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/mlops_project/src/models/train_model.py",
+    "codePath": "src/models/train_model.py",
+    "git": {
+        "remote": "git@github.com:johannespischinger/mlops_project.git",
+        "commit": "7e2853aafecf31f9a4e70eea17282d9d5c0e0e5a"
+    },
+    "email": "johannes.pischinger@tum.de",
+    "root": "/Users/johannespischinger/Documents/Uni/Master/Erasmus/Courses/MLOps/mlops_project",
+    "host": "johannes-mbp-3.students.clients.local",
+    "username": "johannespischinger",
+    "executable": "/Users/johannespischinger/opt/anaconda3/envs/mnist/bin/python"
+}

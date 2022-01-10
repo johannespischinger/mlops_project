@@ -61,10 +61,17 @@ def train(model: nn.Module,
           optimizer: Optional[torch.optim.Optimizer],
           epoch: float = 10,
           batchsize: int = 64,
-          learning_rate: float = 0.001
+          learning_rate: float = 0.001,
+          test = False
           ):
     Logger.info('Starting training...')
-    wandb.init()
+
+    if test == True:
+        os.environ['WANDB_SILENT'] = "true"
+        wandb.init(mode='disabled')
+    elif test == False:
+        wandb.init(mode='online')
+
 
     wandb.watch(model,log_freq=100)
     trainloader = torch.utils.data.DataLoader(dataset, batchsize, shuffle=True)
@@ -76,7 +83,6 @@ def train(model: nn.Module,
         acc = []
         for batch_idx, (images, labels) in enumerate(trainloader):
             optimizer.zero_grad()
-            images = images.unsqueeze(1)
             output = model(images.float())
             ps = torch.exp(output)
             top_p, top_class = ps.topk(1, dim=1)
@@ -138,5 +144,5 @@ if __name__ == "__main__":
     dataset = torch.load(os.path.join(path,'data/processed/test.pt'))
 
     train(model, dataset, torch.nn.NLLLoss(), torch.optim.Adam(model.parameters(), lr = 0.001),
-          epoch = 5, batchsize = 64, learning_rate = 0.001)
+          epoch = 1, batchsize = 64, learning_rate = 0.001)
 
