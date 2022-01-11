@@ -35,7 +35,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install isort
+    - name: Install flake8
       run: |
         python -m pip install --upgrade pip
         pip install flake8
