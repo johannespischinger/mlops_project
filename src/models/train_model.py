@@ -1,7 +1,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import Callable, List, Optional, Tuple, Union
+from typing import Callable, Optional, Union
 
 import torch
 from torch import nn
