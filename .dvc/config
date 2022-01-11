@@ -1,4 +1,6 @@
 [core]
-    remote = strage
+    remote = remote_storage
 ['remote "strage"']
     url = gdrive://1-30tv_UQD2o_dyNjFrzgsbNYm-zesFd_
+['remote "remote_storage"']
+    url = gs://mlops_dtu_project_1/
