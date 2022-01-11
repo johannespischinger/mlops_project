@@ -70,10 +70,10 @@ def train(
 ):
     Logger.info("Starting training...")
 
-    if test == True:
+    if test is True:
         os.environ["WANDB_SILENT"] = "true"
         wandb.init(mode="disabled")
-    elif test == False:
+    elif test is False:
         wandb.init(mode="online")
 
     wandb.watch(model, log_freq=100)
@@ -127,7 +127,7 @@ def train(
         "state_dict": model.state_dict(),
     }
 
-    modelstring = str(f"b_{batchsize}_e_{epoch}_lr_{learning_rate}")
+    # modelstring = str(f"b_{batchsize}_e_{epoch}_lr_{learning_rate}")
     os.makedirs("models/", exist_ok=True)
 
     torch.save(checkpoint, "models/trained_model.pt")

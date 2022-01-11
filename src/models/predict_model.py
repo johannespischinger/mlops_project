@@ -1,7 +1,6 @@
 import argparse
-import os
 
-import numpy as np
+
 import torch
 from train_model import CNNModel
 
