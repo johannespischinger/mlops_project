@@ -24,7 +24,8 @@ def loader():
 
     return model, dataset
 
-def prediction(model,data):
+
+def prediction(model, data):
 
     testloader = torch.utils.data.DataLoader(data)
     test_acc = []
