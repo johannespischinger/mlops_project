@@ -1,8 +1,9 @@
+import matplotlib.pyplot as plt
+import torch
+from sklearn.manifold import TSNE
+
 from src.models.predict_model import loader
 from src.models.train_model import CNNModel
-import torch
-import matplotlib.pyplot as plt
-from sklearn.manifold import TSNE
 
 
 def visualize():

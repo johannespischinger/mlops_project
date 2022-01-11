@@ -1,9 +1,12 @@
-from src.models.train_model import CNNModel,train
 import logging
-import torch
 import os
-from tests import _PROJECT_ROOT
+
 import pytest
+import torch
+
+from src.models.train_model import CNNModel, train
+from tests import _PROJECT_ROOT
+
 
 @pytest.mark.skipif(not os.path.exists(f'{_PROJECT_ROOT}/data'), reason='Data files not found')
 def test_train(caplog):

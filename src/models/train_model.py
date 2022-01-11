@@ -1,10 +1,12 @@
+import logging
 import os
+from pathlib import Path
+from typing import Callable, List, Optional, Tuple, Union
+
 import torch
 from torch import nn
-from typing import Callable, Optional, Tuple, Union, List
+
 import wandb
-from pathlib import Path
-import logging
 
 Logger = logging.getLogger(__name__)
 

@@ -1,9 +1,12 @@
-import torch
-from pathlib import Path
 import os
+from pathlib import Path
+
 import numpy as np
 import pytest
+import torch
+
 from tests import _PROJECT_ROOT
+
 
 @pytest.mark.skipif(not os.path.exists(f'{_PROJECT_ROOT}/data/processed'), reason='Data files not found')
 def test_load():

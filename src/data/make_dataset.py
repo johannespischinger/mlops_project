@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import os.path
-import click
-import logging
-from pathlib import Path
-from dotenv import find_dotenv, load_dotenv
-import torch
-import numpy as np
 import glob as glob
+import logging
+import os.path
+from pathlib import Path
+
+import click
+import numpy as np
+import torch
+from dotenv import find_dotenv, load_dotenv
 
 
 @click.command()

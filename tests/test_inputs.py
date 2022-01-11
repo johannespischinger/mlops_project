@@ -1,6 +1,8 @@
 import pytest
-from src.models.train_model import CNNModel
 import torch
+
+from src.models.train_model import CNNModel
+
 
 @pytest.mark.parametrize('inputs,output', [([1,1,28,28],392),
                                            ([1,1,32,32],512)])

@@ -1,6 +1,8 @@
 import pytest
 import torch
+
 from src.models.train_model import CNNModel
+
 
 def test_model():
     input = torch.randint(0, 255, size=(4, 1, 28, 28))
