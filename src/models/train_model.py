@@ -2,14 +2,18 @@ import logging
 import os
 from pathlib import Path
 from typing import Callable, Optional, Union
+from dotenv import load_dotenv
 
 import torch
 from torch import nn
+from secret_manager import access_secret_version
 
 import wandb
 
-Logger = logging.getLogger(__name__)
 
+Logger = logging.getLogger(__name__)
+load_dotenv()
+wandb.login(key=access_secret_version('dtu-mlops','WANDB_API_KEY',1))
 
 class CNNModel(nn.Module):
     def __init__(self, input_shape=[1, 1, 28, 28]):
@@ -74,7 +78,7 @@ def train(
         os.environ["WANDB_SILENT"] = "true"
         wandb.init(mode="disabled")
     elif test is False:
-        wandb.init(mode="online")
+        wandb.init(project='MNIST',mode="online")
 
     wandb.watch(model, log_freq=100)
     trainloader = torch.utils.data.DataLoader(dataset, batchsize, shuffle=True)
